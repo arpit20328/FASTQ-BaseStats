@@ -14,4 +14,4 @@ G       46098045
 T       40245144
 
 Sample PNG Output is as follows:  
-![Basetasts_SQK-16S114-24_barcode09 fastq](https://github.com/user-attachments/assets/6efd4294-881f-4be1-9f5c-22151387f273)
+![github](https://github.com/user-attachments/assets/52d25551-b8ee-4991-b019-3a2d7c374fd1)
