@@ -1,53 +1,34 @@
-import subprocess
-import matplotlib.pyplot as plt
+from collections import defaultdict
+import argparse
+import gzip
 
-def count_bases(fastq_file, threads):
-    counts = {
-        'A': 0, 'T': 0, 'C': 0, 'G': 0, 'N': 0,
-        'R': 0, 'Y': 0, 'S': 0, 'W': 0, 'K': 0, 'M': 0,
-        'B': 0, 'D': 0, 'H': 0, 'V': 0,
-        '.': 0, '-': 0
-    }
+def count_base_frequencies(fastq_file):
+    base_counts = defaultdict(int)  # Dictionary to store base counts
 
-    seqkit_command = ["seqkit", "fx2tab", "--threads", str(threads), fastq_file]
-    process = subprocess.Popen(seqkit_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-
-    for line in process.stdout:
-        columns = line.strip().split("\t")
-        if len(columns) > 1:
-            sequence = columns[1]  # Second column contains the sequence
-            for base in sequence:
-                if base in counts:
-                    counts[base] += 1
-
-    process.wait()
-    return counts
-
-
-def plot_counts(counts):
-    bases = list(counts.keys())
-    values = list(counts.values())
-
-    plt.figure(figsize=(12, 6))
-    plt.bar(bases, values, color='blue')
-    plt.xlabel('Base')
-    plt.ylabel('Count')
-    plt.title('Counts of Different Bases in FASTQ File')
-    plt.show()
+    # Open the file (supports both .fastq and .fastq.gz)
+    open_func = gzip.open if fastq_file.endswith(".gz") else open
+    with open_func(fastq_file, "rt") as fq:
+        line_count = 0
+        for line in fq:
+            line_count += 1
+            if line_count % 4 == 2:  # 2nd line of each read (sequence)
+                for base in line.strip():
+                    base_counts[base] += 1  # Count each letter
+    
+    return base_counts
 
 
 def main():
-    import argparse
-    parser = argparse.ArgumentParser(description="Count bases in FASTQ file and plot the counts")
+    parser = argparse.ArgumentParser(description="Count letter frequencies in FASTQ sequences (2nd line of each read)")
     parser.add_argument("fastq_file", help="Input FASTQ file")
-    parser.add_argument("--threads", type=int, default=4, help="Number of threads to use for reading the FASTQ file")
     args = parser.parse_args()
 
-    counts = count_bases(args.fastq_file, args.threads)
-    for base, count in counts.items():
-        print(f"{base}: {count}")
+    counts = count_base_frequencies(args.fastq_file)
 
-    plot_counts(counts)
+    # Print results
+    print("\nBase Frequency Counts:")
+    for base, count in sorted(counts.items()):
+        print(f"{base}: {count}")
 
 
 if __name__ == "__main__":
