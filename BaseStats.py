@@ -59,6 +59,11 @@ def save_base_frequencies(base_counts, fastq_file):
         f.write("Base\tCount\n")  # Write header
         for base, count in sorted(base_counts.items()):
             f.write(f"{base}\t{count}\n")  # Write each base and its count
+        
+        # Calculate total ATCG count (A + T + C + G)
+        total_ATCG = sum(base_counts[base] for base in ['A', 'T', 'C', 'G'])
+        f.write(f"\nTotal_ATCG: {total_ATCG}\n")
+        
     print(f"Data saved to {output_file}")
 
 def main():
@@ -72,6 +77,10 @@ def main():
     print("\nBase Frequency Counts:")
     for base, count in sorted(counts.items()):
         print(f"{base}: {count}")
+
+    # Calculate and print total ATCG
+    total_ATCG = sum(counts[base] for base in ['A', 'T', 'C', 'G'])
+    print(f"\nTotal_ATCG: {total_ATCG}")
 
     # Plot the base frequencies
     plot_base_frequencies(counts, args.fastq_file)
