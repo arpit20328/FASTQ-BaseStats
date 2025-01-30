@@ -52,6 +52,15 @@ def plot_base_frequencies(base_counts, fastq_file):
     plt.close()
     print(f"Plot saved as {output_file}")
 
+def save_base_frequencies(base_counts, fastq_file):
+    # Save the base frequencies to a text file
+    output_file = f"Basetasts_{os.path.basename(fastq_file)}.txt"
+    with open(output_file, "w") as f:
+        f.write("Base\tCount\n")  # Write header
+        for base, count in sorted(base_counts.items()):
+            f.write(f"{base}\t{count}\n")  # Write each base and its count
+    print(f"Data saved to {output_file}")
+
 def main():
     parser = argparse.ArgumentParser(description="Count letter frequencies in FASTQ sequences (2nd line of each read)")
     parser.add_argument("fastq_file", help="Input FASTQ file")
@@ -66,6 +75,9 @@ def main():
 
     # Plot the base frequencies
     plot_base_frequencies(counts, args.fastq_file)
+
+    # Save the base frequencies to a text file
+    save_base_frequencies(counts, args.fastq_file)
 
 if __name__ == "__main__":
     main()
