@@ -2,6 +2,8 @@ import argparse
 import gzip
 import time
 from collections import defaultdict
+import matplotlib.pyplot as plt
+import os
 
 def count_base_frequencies(fastq_file):
     base_counts = defaultdict(int)  # Dictionary to store base counts
@@ -33,6 +35,23 @@ def count_base_frequencies(fastq_file):
     
     return base_counts
 
+def plot_base_frequencies(base_counts, fastq_file):
+    # Plot the frequency of each base
+    bases = list(base_counts.keys())
+    counts = list(base_counts.values())
+
+    plt.figure(figsize=(8, 6))
+    plt.bar(bases, counts, color='skyblue')
+    plt.xlabel('Base')
+    plt.ylabel('Frequency')
+    plt.title(f'Base Frequencies in {os.path.basename(fastq_file)}')
+
+    # Save the plot as PNG file
+    output_file = f"Basetasts_{os.path.basename(fastq_file)}.png"
+    plt.savefig(output_file)
+    plt.close()
+    print(f"Plot saved as {output_file}")
+
 def main():
     parser = argparse.ArgumentParser(description="Count letter frequencies in FASTQ sequences (2nd line of each read)")
     parser.add_argument("fastq_file", help="Input FASTQ file")
@@ -45,6 +64,8 @@ def main():
     for base, count in sorted(counts.items()):
         print(f"{base}: {count}")
 
+    # Plot the base frequencies
+    plot_base_frequencies(counts, args.fastq_file)
 
 if __name__ == "__main__":
     main()
