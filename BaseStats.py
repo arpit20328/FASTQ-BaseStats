@@ -12,10 +12,16 @@ def count_bases(fastq_file, threads):
     seqkit_command = ["seqkit", "fx2tab", "--threads", str(threads), fastq_file]
     process = subprocess.Popen(seqkit_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
+    read_line = False
     for line in process.stdout:
-        for base in line.strip():
-            if base in counts:
-                counts[base] += 1
+        if line.startswith('@'):
+            read_line = True
+            continue
+        if read_line:
+            for base in line.strip():
+                if base in counts:
+                    counts[base] += 1
+            read_line = False
 
     process.wait()
     return counts
