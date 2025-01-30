@@ -1,22 +1,37 @@
-from collections import defaultdict
 import argparse
 import gzip
+import time
+from collections import defaultdict
 
 def count_base_frequencies(fastq_file):
     base_counts = defaultdict(int)  # Dictionary to store base counts
+    total_lines = sum(1 for line in open(fastq_file))  # Total number of lines in the file
 
     # Open the file (supports both .fastq and .fastq.gz)
     open_func = gzip.open if fastq_file.endswith(".gz") else open
     with open_func(fastq_file, "rt") as fq:
         line_count = 0
+        start_time = time.time()  # Start time for remaining time calculation
         for line in fq:
             line_count += 1
             if line_count % 4 == 2:  # 2nd line of each read (sequence)
                 for base in line.strip():
                     base_counts[base] += 1  # Count each letter
+
+            # Update remaining time estimate after every 1000 lines
+            if line_count % 1000 == 0:
+                elapsed_time = time.time() - start_time
+                lines_processed = line_count // 4
+                lines_remaining = (total_lines // 4) - lines_processed
+                if lines_processed > 0:
+                    time_per_line = elapsed_time / lines_processed
+                    remaining_time = time_per_line * lines_remaining
+                    remaining_minutes = remaining_time / 60
+                    print(f"\rProcessed {lines_processed}/{total_lines//4} reads - Estimated time remaining: {remaining_minutes:.2f} minutes", end="")
+
+        print("\nProcessing complete!")
     
     return base_counts
-
 
 def main():
     parser = argparse.ArgumentParser(description="Count letter frequencies in FASTQ sequences (2nd line of each read)")
@@ -33,18 +48,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-import matplotlib.pyplot as plt
-
-def plot_counts(counts):
-    bases = list(counts.keys())
-    values = list(counts.values())
-
-    plt.figure(figsize=(10, 5))
-    plt.bar(bases, values, color='blue')
-    plt.xlabel('Base')
-    plt.ylabel('Count')
-    plt.title('Base Frequency in FASTQ Sequences')
-    plt.show()
