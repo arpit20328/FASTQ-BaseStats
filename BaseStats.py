@@ -33,3 +33,18 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+import matplotlib.pyplot as plt
+
+def plot_counts(counts):
+    bases = list(counts.keys())
+    values = list(counts.values())
+
+    plt.figure(figsize=(10, 5))
+    plt.bar(bases, values, color='blue')
+    plt.xlabel('Base')
+    plt.ylabel('Count')
+    plt.title('Base Frequency in FASTQ Sequences')
+    plt.show()
