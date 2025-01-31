@@ -4,7 +4,8 @@ This is applicable to both Short and Long Read FASTQ file. If your FASTQ file is
 
 ## Sample Output 
 Base    Count
-A       40160918
+A       40160918  \n
+
 C       46209207
 G       46098045
 T       40245144
