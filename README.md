@@ -3,11 +3,17 @@ Tool to Count Every type of Bases Present in the FASTQ file with txt and Frequen
 This is applicable to both Short and Long Read FASTQ file. If your FASTQ file is gzipped, make sure its unzipped. Use pigz -d -p <no_of_threads> <your_fastq_file_path>
 
 ## Requierments
+
 argparse (Standard Library) – for parsing command-line arguments.
+
 gzip (Standard Library) – for reading .gz compressed FASTQ files.
+
 time (Standard Library) – for tracking processing time.
+
 collections.defaultdict (Standard Library) – for counting bases efficiently.
+
 matplotlib (External Library) – for plotting base frequencies.
+
 os (Standard Library) – for handling file paths.
 
 
