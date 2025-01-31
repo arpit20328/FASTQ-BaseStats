@@ -4,10 +4,13 @@ This is applicable to both Short and Long Read FASTQ file. If your FASTQ file is
 
 ## Sample Output 
 Base    Count
-A       40160918  \n
+
+A       40160918  
 
 C       46209207
+
 G       46098045
+
 T       40245144
 
 ![Basetasts_CK29976-EP1_S304_R1_001](https://github.com/user-attachments/assets/d26f5e45-67bf-4346-903b-ba25155a0817)
