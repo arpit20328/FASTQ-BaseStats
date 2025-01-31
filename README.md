@@ -1,6 +1,6 @@
 # FASTQ-BaseStats
 Tool to Count Every type of Bases Present in the FASTQ file with txt and Frequency Barplot 
-This is applicable to both Short and Long Read FASTQ file. If your FASTQ file is gzipped, make sure its unzipped. Use pigz -d -p <no of threads> <your fastq file path>
+This is applicable to both Short and Long Read FASTQ file. If your FASTQ file is gzipped, make sure its unzipped. Use pigz -d -p <no_of_threads> <your_fastq_file_path>
 
 ## Requierments
 
